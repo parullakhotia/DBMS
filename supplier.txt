@@ -1,0 +1,358 @@
+mysql> select distinct c.EID
+    -> from certified c, aircraft a
+    -> where a.AID=c.AID AND a.ANAME like "BOEING";
+ERROR 1046 (3D000): No database selected
+mysql> use airport
+Database changed
+mysql> select distinct c.EID
+    -> from certified c, aircraft a
+    -> where a.AID=c.AID AND a.ANAME like "BOEING";
++------+
+| EID  |
++------+
+|  589 |
++------+
+1 row in set (0.45 sec)
+
+mysql> select distinct e.ENAME
+    -> from certified c, employees e, aircraft a
+    -> where a.AID=c.AID AND c.EID=e.EID AND a.ANAME like "BOEING";
++--------+
+| ENAME  |
++--------+
+| SURESH |
++--------+
+1 row in set (2.77 sec)
+
+mysql> select distinct a.AID
+    -> from flights f, aircraft a
+    -> where f.start="LOS ANGELES" AND f.end="NYC" AND a,RANGEOFAIRCRAFT>f.DISTANCE;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'RANGEOFAIRCRAFT>f.DISTANCE' at line 3
+mysql> select distinct a.AID
+    -> from flights f, aircraft a
+    -> where f.start="LOS ANGELES" AND f.end="NYC" AND a.RANGEOFAIRCRAFT>f.DISTANCE;
+ERROR 1054 (42S22): Unknown column 'f.start' in 'where clause'
+mysql> select distinct a.AID
+    -> from flights f, aircraft a
+    -> where f.DEPARTSFROM="LOS ANGELES" AND f.ARRIVESTO="NYC" AND a.RANGEOFAIRCRAFT>f.DISTANCE;
++------+
+| AID  |
++------+
+|  478 |
+|  236 |
+|  534 |
+|  786 |
+| 1278 |
++------+
+5 rows in set (0.00 sec)
+
+mysql> select distinct F.FLNO
+    -> from flights f, aircraft a;
++------+
+| FLNO |
++------+
+| 1234 |
+| 1334 |
+| 1444 |
+| 1634 |
++------+
+4 rows in set (0.00 sec)
+
+mysql> select distinct f.FLNO
+    -> from flights f, aircraft a, certified c, employees e
+    -> where a.AID=c.AID and e.EID=c.EID and f.distance < a.RANGEOFAIRCRAFT and e.SALARY>100000;
++------+
+| FLNO |
++------+
+| 1234 |
+| 1334 |
+| 1444 |
+| 1634 |
++------+
+4 rows in set (0.00 sec)
+
+mysql> select distinct e.ENAME
+    -> ;
+ERROR 1109 (42S02): Unknown table 'e' in field list
+mysql> select distinct e.EID
+    -> from employees e
+    -> where e.SALARY=(select max(e2. SALARY) from employees e2);
++------+
+| EID  |
++------+
+|  549 |
++------+
+1 row in set (0.00 sec)
+
+mysql> select distinct e.EID
+    -> from employees e
+    -> where e.SALARY=(select max(e2. SALARY) from employees e2 where e2.salary > (select max(e3.SALARY) from employees e3));
+Empty set (0.00 sec)
+
+mysql> select EID
+    -> from certified
+    -> group by EID
+    -> having count(*)=3;
++------+
+| EID  |
++------+
+|  549 |
+|  642 |
++------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct e.ENAME
+    -> from certified c, employees e, aircraft a
+    -> where e.EID=c.EID and a.AID=c.AID and a.RANGEOFAIRCRAFT>3000 AND e.EID not in(select c2.eid from certified c2, aircraft a2 where c2.AID=a2. AID and a2.ANAME LIKE "BOEING";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> select distinct e.ENAME
+    -> from certified c, employees e, aircraft a
+    -> where e.EID=c.EID and a.AID=c.AID and a.RANGEOFAIRCRAFT>3000 AND e.EID not in(select c2.eid from certified c2, aircraft a2 where c2.AID=a2. AID and a2.ANAME LIKE "BOEING");
++---------+
+| ENAME   |
++---------+
+| SHALINI |
+| SHAUHJA |
+| ANJILI  |
+| ANKUSH  |
+| VARSHA  |
++---------+
+5 rows in set (0.01 sec)
+
+mysql> select distinct e.ENAME ;
+ERROR 1109 (42S02): Unknown table 'e' in field list
+mysql> create database market
+    -> ;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> use market
+Database changed
+mysql> create table suppliers(
+    -> SID int,
+    -> SNAME var char(10),
+    ->  ADDRESS var char(10));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'var char(10),
+ ADDRESS var char(10))' at line 3
+mysql> create table suppliers(
+    -> SID int,
+    -> SNAME varchar(10),
+    ->  ADDRESS varchar(100));
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> create table suppliers(
+    -> SID int,
+    -> SNAME varchar(10),
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> create table suppliers(
+    -> SID int,
+    -> SNAME varchar(100),
+    ->  ADDRESS varchar(100));
+ERROR 1050 (42S01): Table 'suppliers' already exists
+mysql> create table supplier(
+    -> SID int,
+    -> SNAME varchar(100),
+    ->  ADDRESS varchar(100));
+Query OK, 0 rows affected (0.20 sec)
+
+mysql> create table parts(
+    -> PID int,
+    -> PNAME varchar(100),
+    -> COLOR varchar(100));
+Query OK, 0 rows affected (1.11 sec)
+
+mysql> create table parts(
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> create table catalog(
+    -> SID int,
+    ->
+    -> c;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 4
+mysql> create table catalog(
+    -> SID int,
+    -> PID int,
+    -> cost real);
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> insert into supplier
+    ->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
